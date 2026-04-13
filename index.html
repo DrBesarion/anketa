@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Анкета здоровья</title>
+<style>
+  :root {
+    --grey-bg: #d9d9d9;
+    --green-bg: #c6e0b4;
+    --green-dark: #70ad47;
+    --blue-bg: #bdd7ee;
+    --blue-dark: #2e75b6;
+    --purple-bg: #d9d2e9;
+    --purple-dark: #7030a0;
+    --orange-bg: #ffc000;
+    --orange-dark: #e07b00;
+    --red-bg: #f4cccc;
+    --teal-bg: #76c7c0;
+    --teal-dark: #2e7d78;
+    --yellow-bg: #ffff00;
+    --pink-bg: #ea9999;
+    --section-header-text: #fff;
+    --text-dark: #1a1a1a;
+    --border: #bbb;
+    --input-bg: #fff;
+    --shadow: 0 2px 16px rgba(0,0,0,.10);
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: var(--text-dark);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+    color: #fff;
+    padding: 28px 32px 22px;
+    text-align: center;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+  .page-header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+  .nav-tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid #dce3eb;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  .nav-tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: #1a5276; background: #f4f8fc; }
+  .nav-tab.active { color: #1a5276; border-bottom-color: #2e86c1; background: #f4f8fc; }
+
+  .tab-content { display: none; padding: 24px 16px 90px; max-width: 1000px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  .section-block {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+
+  .section-title {
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: .3px;
+  }
+  .section-title.grey    { background: #808080; }
+  .section-title.green   { background: #538135; }
+  .section-title.blue    { background: var(--blue-dark); }
+  .section-title.purple  { background: var(--purple-dark); }
+  .section-title.orange  { background: #bf8f00; color: #fff; }
+  .section-title.red     { background: #c00000; }
+  .section-title.teal    { background: var(--teal-dark); }
+  .section-title.yellow  { background: #bf8f00; }
+  .section-title.pink    { background: #cc0000; }
+  .section-title.lime    { background: #375623; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0;
+    border-bottom: 1px solid #e8edf2;
+    align-items: stretch;
+  }
+  .row:last-child { border-bottom: none; }
+
+  .row-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    align-self: center;
+  }
+  .row-label.grey-bg   { background: var(--grey-bg); }
+  .row-label.green-bg  { background: var(--green-bg); }
+  .row-label.blue-bg   { background: var(--blue-bg); }
+  .row-label.purple-bg { background: var(--purple-bg); }
+  .row-label.orange-bg { background: var(--orange-bg); }
+  .row-label.red-bg    { background: var(--red-bg); }
+  .row-label.teal-bg   { background: var(--teal-bg); }
+  .row-label.yellow-bg { background: var(--yellow-bg); }
+  .row-label.white-bg  { background: #fff; }
+  .row-label.note      { font-style: italic; color: #555; background: var(--red-bg); font-size: 12px; }
+
+  .row-input {
+    min-width: 180px;
+    width: 220px;
+    padding: 8px 10px;
+    border-left: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    background: #fff;
+  }
+
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    border: 1px solid #ccd6e0;
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 13px;
+    font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text-dark);
+    transition: border-color .2s;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #2e86c1;
+    box-shadow: 0 0 0 2px rgba(46,134,193,.15);
+  }
+  textarea { resize: vertical; min-height: 52px; }
+
+  select { cursor: pointer; }
+
+  .scale-select { width: 80px; }
+
+  /* Rating 0-1-2 styled */
+  .rating-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .rating-btn {
+    width: 32px; height: 28px;
+    border: 1.5px solid #bbb;
+    border-radius: 4px;
+    background: #f5f7fa;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .rating-btn:hover { border-color: #2e86c1; background: #e8f2fb; color: #2e86c1; }
+  .rating-btn.selected-0 { background: #d5f5e3; border-color: #27ae60; color: #1e8449; }
+  .rating-btn.selected-1 { background: #fef9e7; border-color: #f39c12; color: #d68910; }
+  .rating-btn.selected-2 { background: #fdecea; border-color: #e74c3c; color: #c0392b; }
+
+  .yn-group {
+    display: flex;
+    gap: 6px;
+  }
+  .yn-btn {
+    padding: 5px 14px;
+    border: 1.5px solid #bbb;
+    border-radius: 4px;
+    background: #f5f7fa;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    transition: all .15s;
+  }
+  .yn-btn:hover { border-color: #2e86c1; }
+  .yn-btn.selected-да { background: #d5f5e3; border-color: #27ae60; color: #1e8449; }
+  .yn-btn.selected-нет { background: #fdecea; border-color: #e74c3c; color: #c0392b; }
+
+  /* Analysis table */
+  .analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .analysis-table th {
+    background: #2e75b6;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #fff;
+    font-size: 12px;
+  }
+  .analysis-table td {
+    padding: 7px 10px;
+    border: 1px solid #dce3eb;
+    vertical-align: middle;
+  }
+  .analysis-table tr:nth-child(even) { background: #f7f9fc; }
+  .analysis-table tr:hover td { background: #edf3fb; }
+  .analysis-table .group-header td {
+    background: #c6efce;
+    font-weight: 700;
+    font-size: 13px;
+    color: #375623;
+    border-color: #70ad47;
+  }
+  .analysis-table .val-input {
+    width: 90px;
+    text-align: center;
+  }
+  .analysis-table .norm { color: #27ae60; font-weight: 600; }
+  .analysis-table .abbrev { color: #1a5276; font-weight: 700; }
+  .analysis-input-cell { text-align: center; }
+
+  .input-status {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .status-ok   { background: #27ae60; }
+  .status-low  { background: #e74c3c; }
+  .status-high { background: #f39c12; }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 24px 0 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 11px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary { background: #2e86c1; color: #fff; }
+  .btn-primary:hover { background: #1a6fa8; }
+  .btn-success { background: #27ae60; color: #fff; }
+  .btn-success:hover { background: #1e8449; }
+  .btn-secondary { background: #808080; color: #fff; }
+  .btn-secondary:hover { background: #555; }
+
+  .progress-bar-wrap {
+    background: #e8edf2;
+    border-radius: 20px;
+    height: 8px;
+    margin: 8px 0 0;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #27ae60, #2e86c1);
+    border-radius: 20px;
+    transition: width .4s;
+  }
+
+  .summary-box {
+    background: #eaf4fb;
+    border: 1px solid #aed6f1;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .summary-box h3 { color: #1a5276; margin-bottom: 10px; font-size: 15px; }
+  .summary-item { display: flex; gap: 8px; margin-bottom: 4px; }
+  .summary-label { color: #555; min-width: 180px; }
+  .summary-value { font-weight: 600; color: #1a1a1a; }
+
+  .note-banner {
+    background: #fef9c3;
+    border-left: 4px solid #f0c419;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: #555;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0;
+  }
+
+  @media (max-width: 600px) {
+    .row { grid-template-columns: 1fr; }
+    .row-input { width: 100%; border-left: none; border-top: 1px solid #ddd; }
+    .analysis-table { font-size: 11px; }
+    .analysis-table .val-input { width: 70px; }
+  }
+
+  .section-block.collapsible > .section-title {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-block.collapsible > .section-title::after {
+    content: '▼';
+    font-size: 11px;
+    opacity: .7;
+    transition: transform .25s;
+  }
+  .section-block.collapsible.collapsed > .section-title::after {
+    transform: rotate(-90deg);
+  }
+  .section-block.collapsible.collapsed .section-body {
+    display: none;
+  }
+
+  /* ── WEBVIEW COMPATIBILITY ── */
+  * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+  .rating-btn, .yn-btn, .btn { touch-action: manipulation; -webkit-appearance: none; }
+  input, textarea, select { -webkit-appearance: none; font-size: 16px !important; }
+
+  /* ── TOUCH TARGETS ── */
+  .rating-btn { min-width: 46px !important; min-height: 46px !important; font-size: 16px !important; width: 46px !important; height: 46px !important; }
+  .yn-btn     { padding: 11px 20px !important; font-size: 15px !important; min-height: 46px; }
+  .btn        { min-height: 46px; }
+
+  /* ── MOBILE LAYOUT ── */
+  @media (max-width: 640px) {
+    .page-header { padding: 14px 12px 10px; }
+    .page-header h1 { font-size: 17px; }
+    .nav-tabs { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tab { padding: 10px 12px; font-size: 11px; }
+    .tab-content { padding: 10px 8px 100px !important; }
+    .row { grid-template-columns: 1fr !important; }
+    .row-input { width: 100% !important; min-width: unset !important; border-left: none !important; border-top: 1px solid #ddd; }
+    .analysis-table { font-size: 11px; }
+    .val-input, .analysis-table .val-input { width: 66px !important; font-size: 14px !important; }
+    #aging-dashboard { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .score-value { font-size: 28px !important; }
+    .scenario-cols > div { border-right: none !important; border-bottom: 1px solid #eee; display: block; }
+  }
+
+  /* ── SEND BAR (fixed bottom) ── */
+  .send-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 800;
+    background: #fff; border-top: 1px solid #dce3eb;
+    padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+    display: flex; justify-content: center;
+    box-shadow: 0 -3px 16px rgba(0,0,0,.10);
+  }
+  .send-bar-btn {
+    background: linear-gradient(135deg, #1565C0, #0D47A1);
+    color: #fff; border: none; border-radius: 12px;
+    padding: 14px 28px; font-size: 15px; font-weight: 700;
+    cursor: pointer; width: 100%; max-width: 420px; min-height: 50px;
+    touch-action: manipulation;
+  }
+
+  /* ── EMAIL MODAL ── */
+  .modal-bg {
+    display: none; position: fixed; inset: 0; z-index: 1100;
+    background: rgba(0,0,0,.55); align-items: flex-end; justify-content: center;
+  }
+  .modal-bg.open { display: flex; }
+  .modal-card {
+    background: #fff; border-radius: 22px 22px 0 0; width: 100%; max-width: 600px;
+    padding: 22px 18px max(22px, env(safe-area-inset-bottom));
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 -6px 32px rgba(0,0,0,.18);
+    animation: slideUp .25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-card h2 { font-size: 17px; font-weight: 700; color: #1a5276; margin-bottom: 4px; }
+  .modal-card .sub { font-size: 13px; color: #666; margin-bottom: 14px; }
+
+  /* ── EMAIL INPUT IN MODAL ── */
+  .email-row { display: flex; gap: 8px; margin-bottom: 14px; align-items: stretch; }
+  .email-row input {
+    flex: 1; border: 2px solid #ccd6e0; border-radius: 10px;
+    padding: 12px 14px; font-size: 15px; outline: none;
+  }
+  .email-row input:focus { border-color: #1565C0; }
+  .email-row .btn-go {
+    background: #1565C0; color: #fff; border: none; border-radius: 10px;
+    padding: 0 20px; font-size: 14px; font-weight: 700; cursor: pointer;
+    white-space: nowrap; min-height: 48px; touch-action: manipulation;
+  }
+
+  /* ── PREVIEW ── */
+  .preview-box {
+    background: #f4f8fc; border: 1px solid #c5d9ea; border-radius: 10px;
+    padding: 12px 14px; font-size: 12px; line-height: 1.7; color: #333;
+    max-height: 180px; overflow-y: auto; margin-bottom: 14px;
+    white-space: pre-wrap; word-break: break-word;
+  }
+
+  /* ── ACTION BUTTONS ── */
+  .modal-actions { display: flex; flex-direction: column; gap: 9px; }
+  .m-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 16px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    text-decoration: none; color: #fff; min-height: 52px;
+    touch-action: manipulation;
+  }
+  .m-btn-email { background: #E53935; }
+  .m-btn-tg    { background: #2196F3; }
+  .m-btn-wa    { background: #25D366; }
+  .m-btn-copy  { background: #546E7A; }
+  .m-btn-close { background: #ECEFF1; color: #444; font-weight: 600; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 82px; left: 50%;
+    transform: translateX(-50%) translateY(14px);
+    background: #1b5e20; color: #fff; padding: 10px 24px;
+    border-radius: 24px; font-size: 14px; font-weight: 600;
+    opacity: 0; pointer-events: none; white-space: nowrap;
+    transition: opacity .28s, transform .28s; z-index: 2000;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ SEND BAR ═══ -->
+<div class="send-bar">
+  <button class="send-bar-btn" onclick="openModal()">📤 Отправить врачу</button>
+</div>
+
+<!-- ═══ SEND MODAL ═══ -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <h2>📤 Отправить анкету врачу</h2>
+    <p class="sub">Введите email врача — откроется готовое письмо с вашими данными.</p>
+
+    <div class="email-row">
+      <input type="email" id="doctorEmail" placeholder="email врача" autocomplete="email"
+             oninput="updateLinks()" onkeydown="if(event.key==='Enter')sendEmail()"/>
+      <button class="btn-go" onclick="sendEmail()">✉️ Открыть письмо</button>
+    </div>
+
+    <div class="preview-box" id="previewBox">…</div>
+
+    <div class="modal-actions">
+      <a class="m-btn m-btn-email" id="emailBtn" href="#" onclick="return handleEmail()">✉️ Открыть в почте</a>
+      <a class="m-btn m-btn-tg"    id="tgBtn"    href="#" target="_blank" rel="noopener">✈️ Telegram</a>
+      <a class="m-btn m-btn-wa"    id="waBtn"    href="#" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <button class="m-btn m-btn-copy"  onclick="copyText()">📋 Скопировать текст</button>
+      <button class="m-btn m-btn-close" onclick="closeModal()">✕ Закрыть</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toastEl"></div>
+
+<div class="page-header">
+  <h1>🩺 Анкета здоровья</h1>
+  <p>Интегративная оценка состояния здоровья | Пожалуйста, заполните все разделы</p>
+  <div class="progress-bar-wrap" style="max-width:400px;margin:10px auto 0;">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div style="font-size:12px;opacity:.8;margin-top:4px;" id="progressText">Заполнено: 0%</div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showTab('tab1',this)">📋 Личные данные</div>
+  <div class="nav-tab" onclick="showTab('tab2',this)">🧠 Нервная система</div>
+  <div class="nav-tab" onclick="showTab('tab3',this)">🫁 ЖКТ и ССС</div>
+  <div class="nav-tab" onclick="showTab('tab4',this)">⚗️ Гормоны и почки</div>
+  <div class="nav-tab" onclick="showTab('tab5',this)">🥗 Питание</div>
+  <div class="nav-tab" onclick="showTab('tab6',this)">🏃 Образ жизни</div>
+  <div class="nav-tab" onclick="showTab('tab7',this)">🧬 Анализы крови</div>
+  <div class="nav-tab" onclick="showTab('tab8',this)">🔬 Сценарии старения</div>
+</div>
+
+<!-- ===== TAB 1: ЛИЧНЫЕ ДАННЫЕ ===== -->
+<div id="tab1" class="tab-content active">
+
+  <div class="section-block">
+    <div class="section-title grey">Основная информация</div>
+    <div class="section-body">
+      <div class="row">
+        <div class="row-label grey-bg"><strong>ФИО</strong></div>
+        <div class="row-input"><input type="text" id="fio" placeholder="Фамилия Имя Отчество" /></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">1. Сколько вам лет?</div>
+        <div class="row-input"><input type="number" id="age" placeholder="лет" min="1" max="120" /></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">2. Рост (см)</div>
+        <div class="row-input"><input type="number" id="height" placeholder="см" min="100" max="250" /></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">3. Вес (кг)</div>
+        <div class="row-input"><input type="number" id="weight" placeholder="кг" min="30" max="300" /></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">4. Страна</div>
+        <div class="row-input"><input type="text" id="country" placeholder="Страна проживания" /></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">5. Город проживания (учесть экологию, возможность поддержки и курирования оффлайн специалистами)</div>
+        <div class="row-input"><input type="text" id="city" placeholder="Город" /></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#c7a700;color:#fff;">Цели и запросы</div>
+    <div class="section-body">
+      <div class="row">
+        <div class="row-label orange-bg">6. Главная цель по здоровью, самочувствию на данный момент (опишите основные запросы, жалобы, проблемы и пожелания)</div>
+        <div class="row-input"><textarea id="goal_health" placeholder="Опишите..."></textarea></div>
+      </div>
+      <div class="row">
+        <div class="row-label orange-bg">7. Главная цель по эстетике, весу, внешности (задайте параметры желаемого веса, что хотелось бы скорректировать во внешнем виде с зонами и описанием проблемы)</div>
+        <div class="row-input"><textarea id="goal_aesthetics" placeholder="Опишите..."></textarea></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">8. Хронические диагнозы, перенесённые травмы и операции — перечислить все</div>
+        <div class="row-input"><textarea id="diagnoses" placeholder="Перечислите..."></textarea></div>
+      </div>
+      <div class="row">
+        <div class="row-label grey-bg">9. Есть ли у вас анализы за последние 6–12 месяцев?</div>
+        <div class="row-input" id="q9_cell"><div class="yn-group" id="q9"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-primary" onclick="showTab('tab2', 1)">Далее →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 2: НЕРВНАЯ СИСТЕМА ===== -->
+<div id="tab2" class="tab-content">
+
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">1. Нервная система, стресс и когнитивные функции</div>
+    <div class="section-body" id="sec1_body"></div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab1', 0)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab3', 2)">Далее →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 3: ЖКТ и ССС ===== -->
+<div id="tab3" class="tab-content">
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">2. Состояние кишечника</div>
+    <div class="section-body" id="sec2_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title red" onclick="toggleSection(this)">3. Состояние ЖКТ</div>
+    <div class="section-body" id="sec3_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">4. Симптомы интоксикации</div>
+    <div class="section-body" id="sec4_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title blue" onclick="toggleSection(this)">5. Сердечно-сосудистая система</div>
+    <div class="section-body" id="sec5_body"></div>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab2', 1)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab4', 3)">Далее →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 4: ГОРМОНЫ И ПОЧКИ ===== -->
+<div id="tab4" class="tab-content">
+  <div class="section-block collapsible">
+    <div class="section-title purple" onclick="toggleSection(this)">Ж6. Женский гормональный фон: стресс/воспаление/митохондрии</div>
+    <div class="section-body" id="sec6f_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title purple" onclick="toggleSection(this)">М6. Мужской гормональный фон: стресс/инсулинорезистентность</div>
+    <div class="section-body" id="sec6m_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">7. Мочеиспускание и почки</div>
+    <div class="section-body" id="sec7_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">8. Опорно-двигательный аппарат</div>
+    <div class="section-body" id="sec8_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title purple" onclick="toggleSection(this)">9. Эндокринная система: стресс/воспаление/инсулин</div>
+    <div class="section-body" id="sec9_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">10. Иммунитет: стресс/воспаление</div>
+    <div class="section-body" id="sec10_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title lime" onclick="toggleSection(this)">11. Дыхательная система: воспаление</div>
+    <div class="section-body" id="sec11_body"></div>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab3', 2)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab5', 4)">Далее →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 5: ПИТАНИЕ ===== -->
+<div id="tab5" class="tab-content">
+  <div class="note-banner">После заполнения данной анкеты рекомендуется пройти анкету по анализу качества питания для более точного определения дефицитов и нарушений.</div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">12.1. Количество выпиваемой воды в сутки</div>
+    <div class="section-body" id="sec12_1_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">12.2. Питание, вес и эстетика тела</div>
+    <div class="section-body" id="sec12_2_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">12.2.2. Сложности с коррекцией веса</div>
+    <div class="section-body" id="sec12_22_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">12.2.3. Тип питания</div>
+    <div class="section-body" id="sec12_23_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title teal" onclick="toggleSection(this)">12.2.4–12.2.13. Детали питания</div>
+    <div class="section-body" id="sec12_det_body"></div>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab4', 3)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab6', 5)">Далее →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 6: ОБРАЗ ЖИЗНИ ===== -->
+<div id="tab6" class="tab-content">
+  <div class="section-block collapsible">
+    <div class="section-title grey" onclick="toggleSection(this)">13. Образ жизни</div>
+    <div class="section-body" id="sec13_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title blue" onclick="toggleSection(this)">14. Эстетические задачи</div>
+    <div class="section-body" id="sec14_body"></div>
+  </div>
+  <div class="section-block collapsible">
+    <div class="section-title green" onclick="toggleSection(this)">15. Мотивация к изменениям</div>
+    <div class="section-body" id="sec15_body"></div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab5', 4)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab7', 6)">К анализам →</button>
+  </div>
+</div>
+
+<!-- ===== TAB 7: АНАЛИЗЫ КРОВИ ===== -->
+<div id="tab7" class="tab-content">
+  <p style="color:#555;font-size:13px;margin-bottom:12px;">Введите значения из ваших анализов. Система подсветит показатели, выходящие за пределы оптимального диапазона.</p>
+
+  <div style="display:flex;gap:12px;margin-bottom:14px;font-size:12px;align-items:center;flex-wrap:wrap;">
+    <span>Пол для норм:</span>
+    <label style="cursor:pointer;"><input type="radio" name="sex" value="m" checked onchange="updateNorms()"> Мужской</label>
+    <label style="cursor:pointer;"><input type="radio" name="sex" value="f" onchange="updateNorms()"> Женский</label>
+    <span style="margin-left:16px;">
+      <span style="background:#d5f5e3;padding:2px 8px;border-radius:4px;border:1px solid #27ae60;">✓ в норме</span>
+      <span style="background:#fef9e7;padding:2px 8px;border-radius:4px;border:1px solid #f39c12;margin-left:4px;">↓ ниже</span>
+      <span style="background:#fdecea;padding:2px 8px;border-radius:4px;border:1px solid #e74c3c;margin-left:4px;">↑ выше</span>
+    </span>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#2e75b6;">ОАК — Общий анализ крови</div>
+    <div style="overflow-x:auto;">
+      <table class="analysis-table" id="table_oac"></table>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#375623;">БАК — Биохимический анализ крови</div>
+    <div style="overflow-x:auto;">
+      <table class="analysis-table" id="table_bac"></table>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#7030a0;">Липидограмма</div>
+    <div style="overflow-x:auto;">
+      <table class="analysis-table" id="table_lip"></table>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#bf8f00;">Важные дополнительные анализы</div>
+    <div style="overflow-x:auto;">
+      <table class="analysis-table" id="table_add"></table>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#c00000;">Гормоны</div>
+    <div style="overflow-x:auto;">
+      <table class="analysis-table" id="table_hor"></table>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab6', 5)">← Назад</button>
+    <button class="btn btn-primary" onclick="showTab('tab8', 7)">Сценарии старения →</button>
+    <button class="btn btn-success" onclick="exportData()">💾 Сохранить / Экспорт</button>
+    <button class="btn btn-primary" onclick="printForm()">🖨 Печать</button>
+  </div>
+</div>
+
+<!-- ===== TAB 8: СЦЕНАРИИ СТАРЕНИЯ ===== -->
+<div id="tab8" class="tab-content">
+
+  <div class="section-block">
+    <div class="section-title" style="background:#7b6000;color:#fff;">📊 Сценарии старения — автоматический подсчёт баллов</div>
+    <div style="padding:14px 18px;font-size:13px;color:#555;line-height:1.7;">
+      Баллы рассчитываются автоматически на основе всех заполненных разделов анкеты (симптомы 0/1/2) и данных анализов крови (отклонения от нормы). Система учитывает вклад каждого показателя в четыре сценария биологического старения.
+    </div>
+  </div>
+
+  <!-- Score dashboard -->
+  <div id="aging-dashboard" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+    <div class="score-card" id="card-str" data-scenario="str">
+      <div class="score-card-title" style="background:#d9534f;">🔴 Хронический дистресс</div>
+      <div class="score-card-body">
+        <div class="score-value" id="score-str">0</div>
+        <div class="score-label">баллов</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-str" style="background:#d9534f;width:0%"></div></div>
+      </div>
+    </div>
+    <div class="score-card" id="card-vosp" data-scenario="vosp">
+      <div class="score-card-title" style="background:#e07b00;">🟠 Хроническое воспаление</div>
+      <div class="score-card-body">
+        <div class="score-value" id="score-vosp">0</div>
+        <div class="score-label">баллов</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-vosp" style="background:#e07b00;width:0%"></div></div>
+      </div>
+    </div>
+    <div class="score-card" id="card-mit" data-scenario="mit">
+      <div class="score-card-title" style="background:#7030a0;">🟣 Дисфункция митохондрий</div>
+      <div class="score-card-body">
+        <div class="score-value" id="score-mit">0</div>
+        <div class="score-label">баллов</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-mit" style="background:#7030a0;width:0%"></div></div>
+      </div>
+    </div>
+    <div class="score-card" id="card-ins" data-scenario="ins">
+      <div class="score-card-title" style="background:#2e75b6;">🔵 Инсулинорезистентность</div>
+      <div class="score-card-body">
+        <div class="score-value" id="score-ins">0</div>
+        <div class="score-label">баллов</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-ins" style="background:#2e75b6;width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-success" onclick="calcAgingScores()" style="margin-bottom:20px;font-size:15px;padding:13px 36px;">
+    🔄 Пересчитать баллы
+  </button>
+
+  <!-- Scenario descriptions -->
+  <div class="section-block">
+    <div class="section-title red">🔴 Хронический дистресс</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:14px 16px;background:#fff3f3;border-right:1px solid #f4cccc;font-size:13px;line-height:1.7;">
+        <strong>Описание сценария:</strong><br>
+        Часто является запускным механизмом для активации других сценариев. Связан с интоксикацией и функциями детокса, микробиомом, хроническим психоэмоциональным стрессом и образом жизни.
+      </div>
+      <div style="padding:14px 16px;background:#fdecea;font-size:13px;line-height:1.7;">
+        <strong>Важные акценты программы:</strong><br>
+        Требуется детокс + поддержка микробиома + работа с образом жизни (сон/отдых) и техники снятия стресса.
+      </div>
+    </div>
+    <div style="padding:10px 16px;background:#fff;font-size:12px;color:#666;">
+      <strong>Учитываемые показатели:</strong> Нервная система (1.1–1.8), ЖКТ (2–3), интоксикация (4), иммунитет (10), ферритин, витамин D, ТТГ, гомоцистеин, тестостерон, общий белок/альбумин
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title" style="background:#e07b00;">🟠 Хроническое воспаление</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:14px 16px;background:#fff8f0;border-right:1px solid #fce5c0;font-size:13px;line-height:1.7;">
+        <strong>Описание сценария:</strong><br>
+        Дисбаланс, поломка в иммунной системе. Нейровоспаления, АИТ, хронический сбой в работе иммунной системы, устойчивые аллергические реакции, выраженная негативная симптоматика в состоянии ЖКТ. Хронические воспаления тканей и органов.
+      </div>
+      <div style="padding:14px 16px;background:#fff3e0;font-size:13px;line-height:1.7;">
+        <strong>Важные акценты программы:</strong><br>
+        Часто активизируется сценарием «дистресс», ведёт к изменениям гормонального фона, снижению функции иммунитета, воспалениям тканей.
+      </div>
+    </div>
+    <div style="padding:10px 16px;background:#fff;font-size:12px;color:#666;">
+      <strong>Учитываемые показатели:</strong> ЖКТ (3), дыхательная (11), сердечно-сосудистая (5), аллергии (4.6), щитовидная (9.1), С-реактивный белок, гомоцистеин, витамин D, триглицериды, холестерин ЛПНП
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title purple">🟣 Дисфункция митохондрий</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:14px 16px;background:#f8f3ff;border-right:1px solid #e4d5f5;font-size:13px;line-height:1.7;">
+        <strong>Описание сценария:</strong><br>
+        Все остальные нарушения, пробой в уязвимом звене, организм истощён, дефициты накоплены и не устраняются сразу простым «докармливанием». Сбой является хроническим на уровне митохондрий, обычно страдают совокупно самые энергоёмкие органы — щитовидная железа, мозг, иммунная система, поджелудочная, сердце, почки, печень.
+      </div>
+      <div style="padding:14px 16px;background:#f3eaff;font-size:13px;line-height:1.7;">
+        <strong>Важные акценты программы:</strong><br>
+        Может быть активирована любым сценарием, чаще «дистресс». Выражается в остром нарушении выработки энергии клеток, усугубляется дефицитарными состояниями и неполноценной работой ЖКТ.
+      </div>
+    </div>
+    <div style="padding:10px 16px;background:#fff;font-size:12px;color:#666;">
+      <strong>Учитываемые показатели:</strong> Усталость (1.1, 4.4), нарушение сна, когнитивные функции (1.6), ОДА (8), щитовидная (9.1–9.2), дыхание (11), общий белок, гемоглобин, эритроциты, ферритин, ТТГ, Т3, Т4, витамин D, мочевина/креатинин
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-title blue">🔵 Инсулинорезистентность</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:14px 16px;background:#f0f6ff;border-right:1px solid #c9dff5;font-size:13px;line-height:1.7;">
+        <strong>Описание сценария:</strong><br>
+        Часто запускается дистрессом или воспалением. Нарушение углеводного обмена как главный механизм поломки, нарушение адаптации к сахарам, накопление висцерального жира, метаболические расстройства, часто проблемы с массой тела, преддиабеты и диабет 2 типа, часто идут в совокупности с нарушением оттока желчи.
+      </div>
+      <div style="padding:14px 16px;background:#e8f3ff;font-size:13px;line-height:1.7;">
+        <strong>Важные акценты программы:</strong><br>
+        Может быть активирована любым сценарием, часто дистрессом или воспалением. Важную роль в развитии играет нарушение питания, часто — лишний вес. Напрямую часто связана с функцией оттока желчи и детокса ЖКТ.
+      </div>
+    </div>
+    <div style="padding:10px 16px;background:#fff;font-size:12px;color:#666;">
+      <strong>Учитываемые показатели:</strong> Эндокринная (9.2), сердечно-сосудистая (5.3, 5.6, 5.10), питание (12), ОДА (пивной живот М6.5), глюкоза, HbA1c, инсулин, С-пептид, триглицериды, ЛПВП, ЛПНП, ЛПОНП, холестерин, АлАТ, щелочная фосфатаза, мочевина/креатинин, тестостерон
+    </div>
+  </div>
+
+  <!-- Detailed breakdown -->
+  <div class="section-block" style="margin-top:20px;">
+    <div class="section-title" style="background:#2c3e50;">📋 Детализация по показателям анкеты</div>
+    <div id="aging-breakdown" style="padding:16px;font-size:13px;line-height:1.8;color:#333;">
+      <em style="color:#888;">Нажмите «Пересчитать баллы» для отображения детализации.</em>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-secondary" onclick="showTab('tab7', 6)">← К анализам</button>
+    <button class="btn btn-success" onclick="exportData()">💾 Сохранить / Экспорт</button>
+    <button class="btn btn-primary" onclick="printForm()">🖨 Печать</button>
+  </div>
+</div>
+
+<script>
+// ========== TAB LOGIC ==========
+// showTab replaced below
+
+function toggleSection(titleEl) {
+  titleEl.closest('.section-block').classList.toggle('collapsed');
+}
+
+// ========== RATING BUTTONS (0/1/2) ==========
+function makeRating(id, defaultVal) {
+  const wrap = document.createElement('div');
+  wrap.className = 'rating-group';
+  [0,1,2].forEach(v => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'rating-btn';
+    btn.textContent = v;
+    btn.dataset.val = v;
+    btn.dataset.id = id;
+    if (v === defaultVal) btn.classList.add('selected-'+v);
+    btn.onclick = () => selectRating(id, v);
+    wrap.appendChild(btn);
+  });
+  const hidden = document.createElement('input');
+  hidden.type = 'hidden';
+  hidden.id = id;
+  hidden.value = defaultVal !== undefined ? defaultVal : '';
+  wrap.appendChild(hidden);
+  return wrap;
+}
+
+function selectRating(id, val) {
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(b => {
+    b.classList.remove('selected-0','selected-1','selected-2');
+    if (parseInt(b.dataset.val) === val) b.classList.add('selected-'+val);
+  });
+  document.getElementById(id).value = val;
+  updateProgress();
+}
+
+// ========== YES/NO BUTTONS ==========
+function makeYN(id, defaultVal) {
+  const wrap = document.createElement('div');
+  wrap.className = 'yn-group';
+  ['ДА','НЕТ'].forEach(v => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'yn-btn';
+    btn.textContent = v;
+    btn.dataset.val = v.toLowerCase();
+    btn.dataset.id = id;
+    if (defaultVal && v.toLowerCase() === defaultVal.toLowerCase()) btn.classList.add('selected-'+v.toLowerCase());
+    btn.onclick = () => selectYN(id, v.toLowerCase());
+    wrap.appendChild(btn);
+  });
+  const hidden = document.createElement('input');
+  hidden.type = 'hidden';
+  hidden.id = id;
+  hidden.value = defaultVal || '';
+  wrap.appendChild(hidden);
+  return wrap;
+}
+
+function selectYN(id, val) {
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(b => {
+    b.classList.remove('selected-да','selected-нет');
+    if (b.dataset.val === val) b.classList.add('selected-'+val);
+  });
+  document.getElementById(id).value = val;
+  updateProgress();
+}
+
+// ========== BUILD ROW ==========
+function buildRow(label, id, type, bgClass) {
+  bgClass = bgClass || 'white-bg';
+  const row = document.createElement('div');
+  row.className = 'row';
+  const lbl = document.createElement('div');
+  lbl.className = 'row-label ' + bgClass;
+  lbl.innerHTML = label;
+  row.appendChild(lbl);
+  const inp = document.createElement('div');
+  inp.className = 'row-input';
+  if (type === 'text') {
+    const el = document.createElement('input');
+    el.type = 'text'; el.id = id;
+    el.addEventListener('input', updateProgress);
+    inp.appendChild(el);
+  } else if (type === 'textarea') {
+    const el = document.createElement('textarea');
+    el.id = id;
+    el.addEventListener('input', updateProgress);
+    inp.appendChild(el);
+  } else if (type === 'rating') {
+    inp.appendChild(makeRating(id));
+  } else if (type === 'yn') {
+    inp.appendChild(makeYN(id));
+  }
+  row.appendChild(inp);
+  return row;
+}
+
+function buildSectionTitle(text, colorClass) {
+  const d = document.createElement('div');
+  d.className = 'section-title ' + colorClass;
+  d.textContent = text;
+  return d;
+}
+
+// ========== SECTIONS DATA ==========
+const sec1Items = [
+  ['1.1. Утомляемость, вялость, сниженная работоспособность','s1_1','rating','green-bg'],
+  ['1.2. Перепады настроения','s1_2','rating','green-bg'],
+  ['1.3. Беспокойство, тревога','s1_3','rating','green-bg'],
+  ['1.4. Подавленное настроение (грусть или апатия)','s1_4','rating','green-bg'],
+  ['1.5.1. Нарушения сна (бессонница, частые пробуждения)','s1_51','rating','green-bg'],
+  ['1.5.2. Неосвежающий сон','s1_52','rating','green-bg'],
+  ['1.6. Снижение памяти (сложности с запоминанием или вспоминанием информации, спутанность, затруднённое восприятие, сложности с концентрацией внимания) — митохондрии/стресс','s1_6','rating','green-bg'],
+  ['1.7. Снижение слуха','s1_7','rating','green-bg'],
+  ['1.7b. Снижение зрения (кроме близорукости и дальнозоркости)','s1_7b','rating','green-bg'],
+  ['1.8. Глаукома/катаракта/отслоение сетчатки','s1_8','rating','green-bg'],
+];
+
+const sec2Items = [
+  ['2.1.2. Периодические запоры','s2_1','rating','green-bg'],
+  ['2.1.2b. Периодическая диарея','s2_2','rating','green-bg'],
+  ['2.1.3. Дисбактериоз','s2_3','rating','green-bg'],
+  ['2.2. Применение антибиотиков в течение последнего года','s2_4','yn','green-bg'],
+];
+
+const sec3Items = [
+  ['3.1. Периодический дискомфорт в области желудка (боли, вздутие, тошнота, тяжесть, отрыжка и прочее)','s3_1','rating','red-bg'],
+  ['3.2.1. Желчный и печень (боли в правом подреберье, тошнота после жирной пищи, желтый налёт на языке, дискинезия, холецистит, диагностированный гепатоз, синдром жельбера, перенесённый или хронический гепатит и т.д.)','s3_2','rating','red-bg'],
+  ['3.2.2а. Желчекаменная болезнь — есть ли камни в желчном?','s3_3','yn','red-bg'],
+  ['3.2.2б. Желчный удалён?','s3_4','yn','red-bg'],
+  ['3.3. Геморрой','s3_5','rating','red-bg'],
+];
+
+const sec4Items = [
+  ['4.2. Неприятный запах изо рта или от тела','s4_2','rating','green-bg'],
+  ['4.3. Кожные высыпания: акне, кожный зуд, пигментация, псориаз, дерматит, сыпь и прочее','s4_3','rating','green-bg'],
+  ['4.4. Хроническая усталость (без чрезмерной активности, в выходной день или с утра)','s4_4','rating','green-bg'],
+  ['4.5. Повышение температуры без признаков простуды (37.0–37.4)','s4_5','rating','green-bg'],
+  ['4.6. Есть ли у вас аллергия (на что и как проявляется)','s4_6','textarea','green-bg'],
+];
+
+const sec5Items = [
+  ['5.1. Боль, сдавленность или жжение в грудной клетке','s5_1','rating','blue-bg'],
+  ['5.2. Одышка (учащённое дыхание или ощущение нехватки воздуха) в покое или при небольшой нагрузке','s5_2','rating','blue-bg'],
+  ['5.3. Повышенное давление или гипертония','s5_3','rating','blue-bg'],
+  ['5.4. Пониженное давление или головокружение','s5_4','rating','blue-bg'],
+  ['5.5. Мигрени','s5_5','rating','blue-bg'],
+  ['5.6. Проблемы с сосудами / атеросклероз / вегетососудистая дистония','s5_6','rating','blue-bg'],
+  ['5.7. Вены / варикоз / сосудистая сетка на лице или теле','s5_7','rating','blue-bg'],
+  ['5.8. Нарушение частоты пульса','s5_8','rating','blue-bg'],
+  ['5.9. Носовые кровотечения','s5_9','rating','blue-bg'],
+  ['5.10. По результатам ранее сданных анализов нарушение липидного обмена или риска тромбообразования','s5_10','rating','blue-bg'],
+  ['5.11. Перенесённые сердечно-сосудистые заболевания','s5_11','rating','blue-bg'],
+];
+
+const sec6fItems = [
+  ['Ж6.1. Женский гормональный фон: стресс/воспаление/митохондрии (в т.ч. щитовидная железа)','sf6_1','rating','purple-bg'],
+  ['Ж6.1.1. Нарушение цикла, обильные месячные, ПМС','sf6_2','rating','purple-bg'],
+  ['Ж6.1.3. Диагностированные полипы, миома, кисты и прочие доброкачественные новообразования органов малого таза и молочных желёз','sf6_3','rating','purple-bg'],
+  ['Ж6.1.4. Сниженное или чрезмерное либидо','sf6_4','rating','purple-bg'],
+  ['Ж6.1.5. Трудности с зачатием','sf6_5','rating','purple-bg'],
+  ['Ж6.1.6. Применение оральных контрацептивов','sf6_6','rating','purple-bg'],
+];
+
+const sec6mItems = [
+  ['М6.1. Диагностированные нарушения половых гормонов','sm6_1','rating','purple-bg'],
+  ['М6.2. Простатит, проблемы с простатой','sm6_2','rating','purple-bg'],
+  ['М6.3. Нарушение либидо и сексуальной жизни','sm6_3','rating','purple-bg'],
+  ['М6.4. Проблемы с зачатием','sm6_4','rating','purple-bg'],
+  ['М6.5. Пивной живот','sm6_5','rating','purple-bg'],
+];
+
+const sec7Items = [
+  ['7.1. Проблемы с мочевым пузырём','s7_1','rating','green-bg'],
+  ['7.2. Частые мочеиспускания, боли при мочеиспускании, цистит, простатит, недержание','s7_2','rating','green-bg'],
+  ['7.3. Есть ли у вас камни в почках?','s7_3','yn','green-bg'],
+];
+
+const sec8Items = [
+  ['8.1. Боли в спине, пояснице, шее','s8_1','rating','teal-bg'],
+  ['8.2. Диагностированный остеохондроз','s8_2','rating','teal-bg'],
+  ['8.3. Межпозвоночные грыжи','s8_3','rating','teal-bg'],
+  ['8.4. Боли в суставах или мышцах','s8_4','rating','teal-bg'],
+  ['8.5. Артрит, артроз, протрузии','s8_5','rating','teal-bg'],
+  ['8.6. Беспокоящие старые травмы опорно-двигательного аппарата','s8_6','rating','teal-bg'],
+  ['8.7. Выраженное ограничение подвижности суставов','s8_7','rating','teal-bg'],
+];
+
+const sec9Items = [
+  ['9.1.1. Установленный АИТ (аутоиммунный тиреоидит)','s9_1','rating','purple-bg'],
+  ['9.1.2. Клинически подтверждённые изменения показателей ТТГ, Т3, Т4','s9_2','rating','purple-bg'],
+  ['9.1.3. Гипертиреоз — клинически диагностированный','s9_3','rating','purple-bg'],
+  ['9.1.4. Гипотиреоз','s9_4','rating','purple-bg'],
+  ['9.1.5. Приём гормонов щитовидной железы','s9_5','rating','purple-bg'],
+  ['9.1.6. Ощущение «кома в горле» без выраженного эмоционального стресса','s9_6','rating','purple-bg'],
+  ['9.1.7. Необъяснимые выраженные колебания веса без смены питания','s9_7','rating','purple-bg'],
+  ['9.2.1. Инсулинорезистентность / сахарный диабет 2 типа','s9_8','rating','purple-bg'],
+  ['9.2.2. Подтверждённый сахарный диабет 1 типа','s9_9','rating','purple-bg'],
+  ['9.2.3. Необъяснимая жажда — выпиваю от 2–4 литров воды в день','s9_10','rating','purple-bg'],
+  ['9.2.4. Регулярные срывы на сладкое и другие углеводы, которым предшествует слабость, спутанность сознания, тремор, паническое состояние или острое головокружение','s9_11','rating','purple-bg'],
+  ['9.2.5. Неконтролируемая тяга к сладкому','s9_12','rating','purple-bg'],
+];
+
+const sec10Items = [
+  ['10.1. Частые простуды (более 2 раз в год)','s10_1','rating','green-bg'],
+  ['10.2. Частые болезни ЛОР-органов (боль в горле, насморк или заложенность носа с симптомами простуды, хронический насморк, гайморит и прочее)','s10_2','rating','green-bg'],
+  ['10.3. Частые инфекционные заболевания','s10_3','rating','green-bg'],
+];
+
+const sec11Items = [
+  ['11.1. Частые бронхиты','s11_1','rating','green-bg'],
+  ['11.3. Частый кашель','s11_2','rating','green-bg'],
+  ['11.4. Астма','s11_3','rating','green-bg'],
+  ['11.5. Другие симптомы проблем с лёгкими','s11_4','rating','green-bg'],
+];
+
+const sec12_1Items = [
+  ['— Почти не пью чистую воду','s12_w1','yn','blue-bg'],
+  ['— Выпиваю 2–3 стакана чистой воды в день','s12_w2','yn','blue-bg'],
+  ['— Выпиваю от 1 литра чистой воды в день','s12_w3','yn','blue-bg'],
+  ['— Слежу за количеством выпитой воды, стараюсь пить регулярную норму','s12_w4','yn','blue-bg'],
+];
+
+const sec12_2Items = [
+  ['Актуально ли снижение веса?','s12_lose','rating','blue-bg'],
+  ['Актуален ли набор веса?','s12_gain','rating','blue-bg'],
+  ['Актуально ли улучшить качество тела (силуэт, контуры)?','s12_shape','rating','blue-bg'],
+  ['Актуален ли набор мышечной массы (ягодицы / руки / плечи / бёдра / икры и т.д.)?','s12_muscle','rating','blue-bg'],
+];
+
+const sec12_22Items = [
+  ['— Не могу снизить вес (медленно худею)','s12c_1','yn','green-bg'],
+  ['— Не могу набрать вес','s12c_2','yn','green-bg'],
+  ['— Вес стоит','s12c_3','yn','green-bg'],
+  ['— После диеты быстро набираю','s12c_4','yn','green-bg'],
+  ['— Не могу скульптурировать фигуру даже с занятиями спортом','s12c_5','yn','green-bg'],
+];
+
+const sec12_23Items = [
+  ['Стихийный, традиционный (ничего не исключаю, ем как привык)','s12d_1','yn','green-bg'],
+  ['Стараюсь есть полезные продукты, исключать вредные','s12d_2','yn','green-bg'],
+  ['Спортивные рационы (сбалансированное меню для достижения спортивных результатов)','s12d_3','yn','green-bg'],
+  ['Рацион с подсчётом калорий или дневником питания (выдерживаю калории и/или баланс КБЖУ)','s12d_4','yn','green-bg'],
+  ['Высокобелковый (преимущественно ем белок без жира)','s12d_5','yn','green-bg'],
+  ['Кето (осознанное предпочтение белку и жирам, минимум углеводов)','s12d_6','yn','green-bg'],
+  ['Веганский (строгая система, исключающая продукты животного происхождения)','s12d_7','yn','green-bg'],
+  ['Вегетарианство (ограничивающее продукты животного происхождения)','s12d_8','yn','green-bg'],
+  ['Интервальное питание (выдерживаю интервалы в еде от 12 до 18 часов)','s12d_9','yn','green-bg'],
+  ['Сыроедение','s12d_10','yn','green-bg'],
+];
+
+const sec12_detItems = [
+  ['12.2.4. Придерживаюсь питания: до года','s12e_1','yn','grey-bg'],
+  ['12.2.4. Придерживаюсь питания: от 1 до 3 лет','s12e_2','yn','grey-bg'],
+  ['12.2.4. Придерживаюсь питания: более 3 лет','s12e_3','yn','grey-bg'],
+  ['12.2.4. Придерживаюсь питания: более 10 лет','s12e_4','yn','grey-bg'],
+  ['12.2.4. Придерживаюсь питания: всю жизнь','s12e_5','yn','grey-bg'],
+  ['12.2.5. Аппетит: средний/нормальный (не переедаю, но и сильно не ограничиваю)','s12f_1','yn','green-bg'],
+  ['12.2.5. Аппетит: повышенный — инсулин/стресс','s12f_2','yn','green-bg'],
+  ['12.2.5. Аппетит: сниженный, часто не испытываю желание есть, ем без аппетита','s12f_3','yn','green-bg'],
+  ['12.2.5. Аппетит: стихийный (то не вспоминаю о еде вообще, то не могу остановиться)','s12f_4','yn','green-bg'],
+  ['12.2.5. Бывают частые срывы (качели диета/срыв)','s12f_5','yn','green-bg'],
+  ['12.2.6. Что исключаете из питания категорически (по вкусовым или иным причинам)','s12g_1','textarea','blue-bg'],
+  ['12.2.7. Как часто вынуждены есть вне дома: редко','s12h_1','yn','blue-bg'],
+  ['12.2.7. Как часто вынуждены есть вне дома: 1–2 раза в неделю','s12h_2','yn','blue-bg'],
+  ['12.2.7. Как часто вынуждены есть вне дома: 5 раз в неделю','s12h_3','yn','blue-bg'],
+  ['12.2.7. Как часто вынуждены есть вне дома: почти каждый день','s12h_4','yn','blue-bg'],
+  ['12.2.8. Срывает на: сладкое','s12i_1','yn','green-bg'],
+  ['12.2.8. Срывает на: мучное','s12i_2','yn','green-bg'],
+  ['12.2.8. Срывает на: жирное/жареное','s12i_3','yn','green-bg'],
+  ['12.2.8. Срывает на: острое/солёное — стресс','s12i_4','yn','green-bg'],
+  ['12.2.8. Срывает на: фастфуд или не полезные снеки','s12i_5','yn','green-bg'],
+  ['12.2.8. Срывает на: кофе','s12i_6','yn','green-bg'],
+  ['12.2.8. Срывает на: пиво и другие дрожжевые напитки','s12i_7','yn','green-bg'],
+  ['12.2.8. Срывает на: газировка','s12i_8','yn','green-bg'],
+  ['12.2.8. Срывает на частые перекусы (всё время жую) — инсулин','s12i_9','yn','green-bg'],
+  ['12.2.8. Ни на что не срывает','s12i_10','yn','green-bg'],
+  ['12.2.10. Белок: в среднем 1 приём пищи за день','s12j_1','yn','grey-bg'],
+  ['12.2.10. Белок: в среднем 2 приёма пищи в день','s12j_2','yn','grey-bg'],
+  ['12.2.10. Белок: обычно в каждый приём пищи','s12j_3','yn','grey-bg'],
+  ['12.2.11. Углеводы: в среднем 1 раз в день','s12k_1','yn','blue-bg'],
+  ['12.2.11. Углеводы: в среднем 2 раза в день','s12k_2','yn','blue-bg'],
+  ['12.2.11. Углеводы: в достаточном количестве в каждом приёме пищи','s12k_3','yn','blue-bg'],
+  ['12.2.12. Сколько раз в день едите: 1 раз в день','s12l_1','yn','grey-bg'],
+  ['12.2.12. 1 раз основательно + лёгкие перекусы или кофе','s12l_2','yn','grey-bg'],
+  ['12.2.12. 2 раза в день','s12l_3','yn','grey-bg'],
+  ['12.2.12. 2 раза основательно + перекусы','s12l_4','yn','grey-bg'],
+  ['12.2.12. 3 раза в день','s12l_5','yn','grey-bg'],
+  ['12.2.12. 3 раза в день + перекусы','s12l_6','yn','grey-bg'],
+  ['12.2.12. 4 и более раз в день, включая перекусы','s12l_7','yn','grey-bg'],
+  ['12.2.13. Самый обильный приём пищи: утро','s12m_1','yn','green-bg'],
+  ['12.2.13. Самый обильный приём пищи: день','s12m_2','yn','green-bg'],
+  ['12.2.13. Самый обильный приём пищи: вечер','s12m_3','yn','green-bg'],
+];
+
+const sec13Items = [
+  ['13. Образ жизни (кратко)','s13_0','textarea','grey-bg'],
+  ['13.1. Что сейчас принимаете из лекарств и витаминов (укажите дозировку)','s13_1','textarea','grey-bg'],
+  ['13.2. Заболевания родственников (бабушек, дедушек, родителей)','s13_2','textarea','grey-bg'],
+  ['13.3. Опишите кратко ваш образ жизни и работу: офисная, сидячая, стоячая, пятидневка, сменная, ночные смены, физическая, умственная, характер нагрузки и стресса','s13_3','textarea','grey-bg'],
+  ['13.4. Род деятельности','s13_4','text','grey-bg'],
+  ['13.5а. Вредные привычки: курение','s13_5a','yn','red-bg'],
+  ['13.5б. Вредные привычки: алкоголь чаще 1 раза в неделю','s13_5b','yn','red-bg'],
+  ['13.6а. Регулярный спорт: прогулки и физическая активность от 8000 шагов в день','s13_6a','yn','green-bg'],
+  ['13.6б. Зарядка от 15 минут в день','s13_6b','yn','green-bg'],
+  ['13.6в. Кардио тренировки (беговые, плавание и прочие от 1 раза в неделю)','s13_6c','yn','green-bg'],
+  ['13.6г. Силовые виды спорта (тренажёрный зал, гиревой спорт и т.д. от 1 раза в неделю)','s13_6d','yn','green-bg'],
+  ['13.6д. Стабилизирующие виды спорта (йога, пилатес, растяжка от 1 раза в неделю)','s13_6e','yn','green-bg'],
+  ['13.6е. Практики: дыхательная, медитации, энергетические и прочие (от 1 раза в неделю)','s13_6f','yn','green-bg'],
+  ['13.6ж. Оздоровительные процедуры: сауна, спа, закаливание и т.д. (от 1 раза в неделю)','s13_6g','yn','green-bg'],
+  ['13.6з. Ничего из перечисленного','s13_6h','yn','red-bg'],
+];
+
+const sec14Items = [
+  ['14.1. Внешний возраст: выгляжу на свой возраст','s14_1','yn','green-bg'],
+  ['14.1. Внешний возраст: выгляжу моложе','s14_2','yn','green-bg'],
+  ['14.1. Внешний возраст: выгляжу старше','s14_3','yn','red-bg'],
+  ['14.2. Что беспокоит: такого запроса нет, всё устраивает','s14_4','yn','green-bg'],
+  ['14.2. Выпадение волос, секущиеся слабые волосы','s14_5','yn','blue-bg'],
+  ['14.2. Ломкие, слоящиеся ногти','s14_6','yn','blue-bg'],
+  ['14.2. Молодость, тургор кожи, птоз (обвисания на лице)','s14_7','yn','blue-bg'],
+  ['14.2. Целлюлит, растяжки на теле, обвисания на теле','s14_8','yn','blue-bg'],
+  ['14.2. Красные точки на теле','s14_9','yn','blue-bg'],
+  ['14.2. Сухость или трещины на ступнях и/или коже рук','s14_10','yn','blue-bg'],
+  ['14.2. Неприятный запах пота','s14_11','yn','blue-bg'],
+  ['14.2. Пигментация','s14_12','yn','blue-bg'],
+  ['14.2. Папилломы, чрезмерное количество новых родинок','s14_13','yn','blue-bg'],
+  ['14.2. Отёчность на теле','s14_14','yn','blue-bg'],
+  ['14.2. Цвет лица (бледность, покраснения)','s14_15','yn','blue-bg'],
+  ['14.2. Синяки под глазами','s14_16','yn','blue-bg'],
+  ['14.2. Акне, воспаления, высыпания на лице или теле, розацея','s14_17','yn','blue-bg'],
+];
+
+const sec15Items = [
+  ['15. С чем связано ваше желание изменить образ жизни или скорректировать состояние? (Например: выйти замуж, поднять уверенность в себе, родить здорового ребёнка, подготовиться к операции, избавиться от беспокоящей проблемы по здоровью, убрать проявление хронического диагноза, достичь новых карьерных результатов и т.д.)','s15_1','textarea','green-bg'],
+];
+
+function buildSection(containerId, items) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  items.forEach(([label, id, type, bgClass]) => {
+    container.appendChild(buildRow(label, id, type, bgClass));
+  });
+}
+
+// ========== ANALYSIS TABLES ==========
+function makeAnalysisHeader() {
+  return `<tr>
+    <th style="width:17%">Показатель</th>
+    <th style="width:8%">Ед. изм.</th>
+    <th style="width:8%">Код</th>
+    <th style="width:12%">Норма М</th>
+    <th style="width:12%">Норма Ж</th>
+    <th style="width:14%">Ваше значение</th>
+    <th style="width:29%">Примечание</th>
+  </tr>`;
+}
+
+const analysisData = {
+  oac: [
+    {name:'Гематокрит', unit:'%', code:'HCT', normM:'45–50%', normF:'40–45%', normMR:[45,50], normFR:[40,45], id:'a_hct'},
+    {name:'Гемоглобин', unit:'г/л', code:'Hb/HGB', normM:'125–165', normF:'135–160', normMR:[125,165], normFR:[135,160], id:'a_hgb'},
+    {name:'Эритроциты', unit:'×10¹²/л', code:'RBC', normM:'4,3–4,9', normF:'4,5–5,5', normMR:[4.3,4.9], normFR:[4.5,5.5], id:'a_rbc'},
+    {name:'Средний объём эритроцитов', unit:'фл', code:'MCV', normM:'88–95', normF:'88–93', normMR:[88,95], normFR:[88,93], id:'a_mcv'},
+    {name:'Ширина распределения эритроцитов', unit:'%', code:'RDW', normM:'11–15', normF:'11–15', normMR:[11,15], normFR:[11,15], id:'a_rdw'},
+    {name:'Ширина распределения эритроцитов', unit:'фл', code:'RDW-SD', normM:'37–47', normF:'37–47', normMR:[37,47], normFR:[37,47], id:'a_rdwsd'},
+    {name:'Среднее содержание гемоглобина в эритроцитах', unit:'г/клетку', code:'MCH', normM:'28–32', normF:'28–32', normMR:[28,32], normFR:[28,32], id:'a_mch'},
+    {name:'Средняя концентрация гемоглобина в эритроцитах', unit:'г/л', code:'MCHC', normM:'320–360', normF:'320–360', normMR:[320,360], normFR:[320,360], id:'a_mchc'},
+    {name:'Тромбоциты', unit:'10⁹/л', code:'PLT', normM:'180–399', normF:'180–399', normMR:[180,399], normFR:[180,399], id:'a_plt'},
+    {name:'Средний объём тромбоцитов', unit:'фл', code:'MPV', normM:'7–10', normF:'7–11', normMR:[7,10], normFR:[7,11], id:'a_mpv'},
+    {name:'Лейкоциты', unit:'×10⁹/л', code:'WBC', normM:'4,5–10', normF:'4,5–10', normMR:[4.5,10], normFR:[4.5,10], id:'a_wbc'},
+    {name:'Нейтрофилы', unit:'10⁹/л', code:'NEU', normM:'2–6', normF:'2–6', normMR:[2,6], normFR:[2,6], id:'a_neu'},
+    {name:'Нейтрофилы', unit:'%', code:'NEU%', normM:'45–74', normF:'45–74', normMR:[45,74], normFR:[45,74], id:'a_neup'},
+    {name:'Моноциты', unit:'%', code:'MON', normM:'2–8', normF:'2–8', normMR:[2,8], normFR:[2,8], id:'a_mon'},
+    {name:'Моноциты', unit:'10⁹/л', code:'MON abs', normM:'0,08–0,6', normF:'0,08–0,6', normMR:[0.08,0.6], normFR:[0.08,0.6], id:'a_mona'},
+    {name:'Лимфоциты', unit:'%', code:'LYM', normM:'20–40', normF:'20–40', normMR:[20,40], normFR:[20,40], id:'a_lym'},
+    {name:'Лимфоциты', unit:'10⁹/л', code:'LYM abs', normM:'1,2–4,5', normF:'1,2–4,5', normMR:[1.2,4.5], normFR:[1.2,4.5], id:'a_lyma'},
+    {name:'Эозинофилы', unit:'%', code:'EOS', normM:'0–2', normF:'0–2', normMR:[0,2], normFR:[0,2], id:'a_eos'},
+    {name:'Эозинофилы', unit:'10⁹/л', code:'EOS abs', normM:'0–0,5', normF:'0–0,5', normMR:[0,0.5], normFR:[0,0.5], id:'a_eosa'},
+    {name:'Базофилы', unit:'%', code:'BASO', normM:'0,1–1%', normF:'0,1–1%', normMR:[0.1,1], normFR:[0.1,1], id:'a_baso'},
+    {name:'Базофилы', unit:'10⁹/л', code:'BASO abs', normM:'0–0,1', normF:'0–0,1', normMR:[0,0.1], normFR:[0,0.1], id:'a_basoa'},
+    {name:'СОЭ', unit:'мм/ч', code:'POE', normM:'2–10', normF:'2–10', normMR:[2,10], normFR:[2,10], id:'a_soe'},
+  ],
+  bac: [
+    {name:'Общий белок', unit:'г/л', code:'T-Prot', normM:'75–83', normF:'75–83', normMR:[75,83], normFR:[75,83], id:'b_prot'},
+    {name:'Глюкоза', unit:'ммоль/л', code:'Glucose', normM:'3,70–4,9', normF:'3,70–4,9', normMR:[3.7,4.9], normFR:[3.7,4.9], id:'b_glu'},
+    {name:'Мочевина', unit:'ммоль/л', code:'UREA/BUN', normM:'2,3–6,5', normF:'2,3–6,5', normMR:[2.3,6.5], normFR:[2.3,6.5], id:'b_urea'},
+    {name:'Креатинин', unit:'мкмоль/л', code:'Cr', normM:'80–110', normF:'53–90', normMR:[80,110], normFR:[53,90], id:'b_cr'},
+    {name:'Холестерин', unit:'ммоль/л', code:'Cholesterol', normM:'3,6–5,2', normF:'3,6–5,2', normMR:[3.6,5.2], normFR:[3.6,5.2], id:'b_chol'},
+    {name:'Билирубин общий', unit:'мкмоль/л', code:'Bilirubin total', normM:'3,2–17 (до 10)', normF:'3,2–17 (до 10)', normMR:[3.2,17], normFR:[3.2,17], id:'b_bil'},
+    {name:'Билирубин прямой', unit:'мкмоль/л', code:'BILT', normM:'1,5–5 (до 3,4)', normF:'1,5–5 (до 3,4)', normMR:[1.5,5], normFR:[1.5,5], id:'b_bild'},
+    {name:'Билирубин непрямой', unit:'мкмоль/л', code:'BILT free', normM:'3,2–12', normF:'3,2–12', normMR:[3.2,12], normFR:[3.2,12], id:'b_biln'},
+    {name:'АлАТ (АЛТ)', unit:'мe/л', code:'ALT', normM:'до 30 (до 20)', normF:'до 25 (до 20)', normMR:[0,30], normFR:[0,25], id:'b_alt'},
+    {name:'АcАТ (АСТ)', unit:'мe/л', code:'AST', normM:'до 40 (до 30)', normF:'до 35 (до 30)', normMR:[0,40], normFR:[0,35], id:'b_ast'},
+    {name:'Гамма-глутамилтрансептидаза (ГГТ)', unit:'ед/л', code:'ГГТ', normM:'до 50 (15–20)', normF:'до 32 (15–20)', normMR:[0,50], normFR:[0,32], id:'b_ggt'},
+    {name:'Щелочная фосфатаза', unit:'ед/л', code:'ЩФ', normM:'100–120', normF:'80–100', normMR:[100,120], normFR:[80,100], id:'b_shf'},
+    {name:'Калий', unit:'ммоль/л', code:'K+', normM:'3,5–5,1', normF:'3,5–5,1', normMR:[3.5,5.1], normFR:[3.5,5.1], id:'b_k'},
+    {name:'Цинк', unit:'мкмоль/л', code:'Zn', normM:'11,47–18,35', normF:'11,47–18,35', normMR:[11.47,18.35], normFR:[11.47,18.35], id:'b_zn'},
+    {name:'Медь', unit:'мкмоль/л', code:'Cu', normM:'11–21', normF:'11–21', normMR:[11,21], normFR:[11,21], id:'b_cu'},
+    {name:'Натрий', unit:'ммоль/л', code:'Na+', normM:'136–145', normF:'136–145', normMR:[136,145], normFR:[136,145], id:'b_na'},
+    {name:'Витамин D3', unit:'нг/мл', code:'D3', normM:'30–100 (50–80)', normF:'30–100 (50–80)', normMR:[30,100], normFR:[30,100], id:'b_d3'},
+    {name:'Кальций ионизированный', unit:'ммоль/л', code:'Ca (ион.)', normM:'1,1–1,4', normF:'1,1–1,4', normMR:[1.1,1.4], normFR:[1.1,1.4], id:'b_ca'},
+    {name:'Хлор', unit:'ммоль/л', code:'Cl', normM:'98–106', normF:'98–106', normMR:[98,106], normFR:[98,106], id:'b_cl'},
+    {name:'Мочевая кислота', unit:'мкмоль/л', code:'МК/UA', normM:'200–400', normF:'160–320', normMR:[200,400], normFR:[160,320], id:'b_ua'},
+    {name:'Альбумин', unit:'г/л', code:'ALB', normM:'40–52 (выше 45)', normF:'40–52 (выше 45)', normMR:[40,52], normFR:[40,52], id:'b_alb'},
+  ],
+  lip: [
+    {name:'Холестерин Общий', unit:'ммоль/л', code:'Cholesterol', normM:'3,6–5,2', normF:'3,6–5,2', normMR:[3.6,5.2], normFR:[3.6,5.2], id:'l_chol'},
+    {name:'ЛПВП (хороший холестерин)', unit:'ммоль/л', code:'HDL', normM:'от 1,03 (1,55–1,8)', normF:'от 1,29 (1,55–1,8)', normMR:[1.03,9], normFR:[1.29,9], id:'l_hdl'},
+    {name:'ЛПНП (плохой холестерин)', unit:'ммоль/л', code:'LDL', normM:'2,6–3,9 (до 3)', normF:'2,6–3,9 (до 3)', normMR:[2.6,3.9], normFR:[2.6,3.9], id:'l_ldl'},
+    {name:'ЛПОНП', unit:'ммоль/л', code:'VLDL', normM:'менее 0,5', normF:'менее 0,5', normMR:[0,0.5], normFR:[0,0.5], id:'l_vldl'},
+    {name:'Триглицериды', unit:'ммоль/л', code:'TG', normM:'0,5–1,7', normF:'0,5–1,7', normMR:[0.5,1.7], normFR:[0.5,1.7], id:'l_tg'},
+    {name:'Индекс атерогенности', unit:'', code:'ИА', normM:'до 3', normF:'до 3', normMR:[0,3], normFR:[0,3], id:'l_ia'},
+  ],
+  add: [
+    {name:'Гликированный гемоглобин', unit:'%', code:'HbA1c', normM:'4,6–5,5 (до 5)', normF:'4,6–5,5 (до 5)', normMR:[4.6,5.5], normFR:[4.6,5.5], id:'d_hba1c'},
+    {name:'Ферритин', unit:'мкг/л', code:'S-fer', normM:'70–150 (70–100)', normF:'50–100 (60–100)', normMR:[70,150], normFR:[50,100], id:'d_fer'},
+    {name:'Трансферрин', unit:'г/л', code:'TR/S-Transf', normM:'2–3', normF:'2–3', normMR:[2,3], normFR:[2,3], id:'d_tr'},
+    {name:'Железо', unit:'мкмоль/л', code:'Fe', normM:'15–30', normF:'15–30', normMR:[15,30], normFR:[15,30], id:'d_fe'},
+    {name:'Гомоцистеин', unit:'мкмоль/л', code:'HCY', normM:'5–7', normF:'5–7', normMR:[5,7], normFR:[5,7], id:'d_hcy'},
+    {name:'С-реактивный белок (СРБ)', unit:'мг/л', code:'СРБ', normM:'менее 0,5 (0)', normF:'менее 1 (0)', normMR:[0,0.5], normFR:[0,1], id:'d_crp'},
+    {name:'С-пептид', unit:'нг/мл', code:'C-peptide', normM:'2,5–3', normF:'2,5–3', normMR:[2.5,3], normFR:[2.5,3], id:'d_cpep'},
+    {name:'Инсулин', unit:'мкМЕ/мл', code:'Insulin', normM:'2,6–24,9', normF:'2,6–24,9', normMR:[2.6,24.9], normFR:[2.6,24.9], id:'d_ins'},
+  ],
+  hor: [
+    {name:'Тиреотропный гормон (ТТГ)', unit:'мкМЕ/мл', code:'ТТГ', normM:'0,8–2', normF:'0,8–2', normMR:[0.8,2], normFR:[0.8,2], id:'h_ttg'},
+    {name:'Трийодтиронин свободный', unit:'нг/дл', code:'Т3 своб.', normM:'3,25–4,5', normF:'3,25–4,5', normMR:[3.25,4.5], normFR:[3.25,4.5], id:'h_t3'},
+    {name:'Тироксин свободный', unit:'нг/дл', code:'Т4 своб.', normM:'1,1–1,7', normF:'1,1–1,7', normMR:[1.1,1.7], normFR:[1.1,1.7], id:'h_t4'},
+    {name:'Антитела к тиреоидной пероксидазе', unit:'мe/мл', code:'АТ ТПО', normM:'ниже 2', normF:'ниже 2', normMR:[0,2], normFR:[0,2], id:'h_attpo'},
+    {name:'Антитела к тиреоглобулину', unit:'мe/мл', code:'АТ ТГ', normM:'ниже 2', normF:'ниже 2', normMR:[0,2], normFR:[0,2], id:'h_attg'},
+    {name:'Тестостерон свободный (до 50 лет)', unit:'нмоль/л', code:'FT', normM:'0,2–0,9', normF:'0,001–0,034', normMR:[0.2,0.9], normFR:[0.001,0.034], id:'h_ft'},
+    {name:'Эстрадиол', unit:'пмоль/л', code:'E2', normM:'40–160', normF:'77–921', normMR:[40,160], normFR:[77,921], id:'h_e2'},
+    {name:'Прогестерон', unit:'нмоль/л', code:'P4', normM:'1–5,4', normF:'0,8–6,5', normMR:[1,5.4], normFR:[0.8,6.5], id:'h_p4'},
+  ]
+};
+
+function buildAnalysisTable(tableId, rows) {
+  const tbl = document.getElementById(tableId);
+  tbl.innerHTML = makeAnalysisHeader();
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${r.name}</strong></td>
+      <td style="text-align:center">${r.unit}</td>
+      <td class="abbrev" style="text-align:center">${r.code}</td>
+      <td class="norm" style="text-align:center" id="${r.id}_nm">${r.normM}</td>
+      <td class="norm" style="text-align:center" id="${r.id}_nf">${r.normF}</td>
+      <td class="analysis-input-cell">
+        <input type="number" step="any" class="val-input" id="${r.id}" 
+          placeholder="—" 
+          data-norm-m-low="${r.normMR[0]}" data-norm-m-high="${r.normMR[1]}"
+          data-norm-f-low="${r.normFR[0]}" data-norm-f-high="${r.normFR[1]}"
+          oninput="checkNorm(this)">
+      </td>
+      <td id="${r.id}_msg" style="font-size:11.5px;color:#555;"></td>
+    `;
+    tbl.appendChild(tr);
+  });
+}
+
+function checkNorm(input) {
+  const sex = document.querySelector('input[name="sex"]:checked').value;
+  const val = parseFloat(input.value);
+  const low = parseFloat(sex === 'm' ? input.dataset.normMLow : input.dataset.normFLow);
+  const high = parseFloat(sex === 'm' ? input.dataset.normMHigh : input.dataset.normFHigh);
+  const msg = document.getElementById(input.id + '_msg');
+  if (isNaN(val)) { input.style.background = ''; if(msg) msg.textContent = ''; return; }
+  if (val < low) {
+    input.style.background = '#fef9e7';
+    if(msg) { msg.textContent = '↓ Ниже нормы'; msg.style.color = '#d68910'; }
+  } else if (val > high) {
+    input.style.background = '#fdecea';
+    if(msg) { msg.textContent = '↑ Выше нормы'; msg.style.color = '#c0392b'; }
+  } else {
+    input.style.background = '#d5f5e3';
+    if(msg) { msg.textContent = '✓ В норме'; msg.style.color = '#1e8449'; }
+  }
+  updateProgress();
+}
+
+function updateNorms() {
+  document.querySelectorAll('.val-input').forEach(inp => {
+    if (inp.value) checkNorm(inp);
+  });
+}
+
+// ========== PROGRESS ==========
+function updateProgress() {
+  const all = document.querySelectorAll('input[type="text"],input[type="number"],textarea,input[type="hidden"]');
+  let filled = 0, total = 0;
+  all.forEach(el => {
+    if (el.type === 'hidden' || el.closest('.analysis-table')) return; // skip analysis for progress
+    if (el.closest('.analysis-table')) return;
+    total++;
+    if (el.value && el.value.trim() !== '') filled++;
+  });
+  const pct = total > 0 ? Math.round(filled / total * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Заполнено: ${pct}%`;
+}
+
+// ========== EXPORT ==========
+function exportData() {
+  const data = {};
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.id) data[el.id] = el.value;
+  });
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'anketa_zdorovia.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ========== AGING SCENARIOS SCORING ==========
+
+// Mapping: symptom field id -> {str, vosp, mit, ins} weights
+const symptomWeights = {
+  // 1. Нервная система
+  s1_1:  {str:2, vosp:0, mit:2, ins:0},
+  s1_2:  {str:2, vosp:0, mit:1, ins:0},
+  s1_3:  {str:2, vosp:1, mit:0, ins:0},
+  s1_4:  {str:2, vosp:0, mit:1, ins:0},
+  s1_51: {str:2, vosp:0, mit:1, ins:1},
+  s1_52: {str:1, vosp:0, mit:2, ins:0},
+  s1_6:  {str:2, vosp:1, mit:2, ins:0},
+  s1_7:  {str:0, vosp:1, mit:1, ins:0},
+  s1_7b: {str:0, vosp:1, mit:1, ins:0},
+  s1_8:  {str:0, vosp:1, mit:1, ins:0},
+  // 2. Кишечник
+  s2_1:  {str:1, vosp:1, mit:1, ins:1},
+  s2_2:  {str:1, vosp:1, mit:1, ins:1},
+  s2_3:  {str:1, vosp:2, mit:1, ins:1},
+  // 3. ЖКТ
+  s3_1:  {str:1, vosp:1, mit:1, ins:1},
+  s3_2:  {str:1, vosp:2, mit:1, ins:2},
+  s3_5:  {str:1, vosp:1, mit:0, ins:0},
+  // 4. Интоксикация
+  s4_2:  {str:2, vosp:1, mit:1, ins:0},
+  s4_3:  {str:1, vosp:2, mit:0, ins:1},
+  s4_4:  {str:2, vosp:1, mit:2, ins:1},
+  s4_5:  {str:1, vosp:2, mit:0, ins:0},
+  // 5. ССС
+  s5_1:  {str:1, vosp:1, mit:1, ins:1},
+  s5_2:  {str:1, vosp:1, mit:2, ins:1},
+  s5_3:  {str:1, vosp:1, mit:0, ins:2},
+  s5_4:  {str:1, vosp:0, mit:1, ins:0},
+  s5_5:  {str:2, vosp:1, mit:1, ins:0},
+  s5_6:  {str:1, vosp:2, mit:0, ins:2},
+  s5_7:  {str:0, vosp:1, mit:0, ins:1},
+  s5_8:  {str:1, vosp:1, mit:1, ins:1},
+  s5_9:  {str:1, vosp:1, mit:0, ins:0},
+  s5_10: {str:0, vosp:2, mit:0, ins:2},
+  s5_11: {str:1, vosp:2, mit:1, ins:2},
+  // 6. Гормоны мужские
+  sm6_1: {str:1, vosp:0, mit:1, ins:2},
+  sm6_2: {str:1, vosp:1, mit:0, ins:1},
+  sm6_3: {str:2, vosp:0, mit:1, ins:2},
+  sm6_5: {str:0, vosp:1, mit:0, ins:2},
+  // 7. Почки
+  s7_1:  {str:1, vosp:1, mit:0, ins:1},
+  s7_2:  {str:1, vosp:2, mit:0, ins:1},
+  // 8. ОДА
+  s8_1:  {str:1, vosp:1, mit:1, ins:0},
+  s8_2:  {str:1, vosp:1, mit:1, ins:0},
+  s8_3:  {str:1, vosp:1, mit:1, ins:0},
+  s8_4:  {str:1, vosp:1, mit:1, ins:0},
+  s8_5:  {str:0, vosp:2, mit:1, ins:1},
+  s8_6:  {str:1, vosp:1, mit:1, ins:0},
+  // 9. Эндокринная
+  s9_1:  {str:1, vosp:2, mit:1, ins:0},
+  s9_2:  {str:1, vosp:1, mit:2, ins:0},
+  s9_3:  {str:1, vosp:1, mit:2, ins:0},
+  s9_4:  {str:1, vosp:1, mit:2, ins:0},
+  s9_5:  {str:1, vosp:0, mit:2, ins:0},
+  s9_6:  {str:1, vosp:1, mit:1, ins:0},
+  s9_7:  {str:1, vosp:0, mit:1, ins:2},
+  s9_8:  {str:1, vosp:1, mit:1, ins:2},
+  s9_9:  {str:0, vosp:1, mit:1, ins:2},
+  s9_10: {str:0, vosp:0, mit:0, ins:2},
+  s9_11: {str:1, vosp:0, mit:0, ins:2},
+  s9_12: {str:1, vosp:0, mit:0, ins:2},
+  // 10. Иммунитет
+  s10_1: {str:2, vosp:2, mit:1, ins:0},
+  s10_2: {str:1, vosp:2, mit:1, ins:0},
+  s10_3: {str:1, vosp:2, mit:1, ins:0},
+  // 11. Дыхание
+  s11_1: {str:1, vosp:2, mit:1, ins:0},
+  s11_2: {str:1, vosp:2, mit:1, ins:0},
+  s11_3: {str:1, vosp:2, mit:2, ins:0},
+  s11_4: {str:1, vosp:1, mit:1, ins:0},
+};
+
+// Analysis fields -> scenario weights (triggered when ABNORMAL)
+const analysisWeights = {
+  // ОАК
+  a_hgb:   {str:1, vosp:0, mit:2, ins:0},
+  a_hct:   {str:1, vosp:0, mit:2, ins:0},
+  a_rbc:   {str:0, vosp:1, mit:2, ins:0},
+  a_wbc:   {str:1, vosp:2, mit:0, ins:0},
+  a_soe:   {str:0, vosp:2, mit:0, ins:0},
+  a_plt:   {str:1, vosp:1, mit:1, ins:1},
+  a_neu:   {str:0, vosp:2, mit:0, ins:0},
+  a_neup:  {str:0, vosp:2, mit:0, ins:0},
+  a_lym:   {str:1, vosp:1, mit:1, ins:0},
+  a_eos:   {str:1, vosp:2, mit:0, ins:0},
+  // БАК
+  b_prot:  {str:2, vosp:0, mit:2, ins:0},
+  b_glu:   {str:0, vosp:0, mit:0, ins:2},
+  b_alt:   {str:0, vosp:1, mit:1, ins:2},
+  b_ast:   {str:0, vosp:1, mit:1, ins:1},
+  b_ggt:   {str:0, vosp:1, mit:0, ins:2},
+  b_chol:  {str:1, vosp:1, mit:0, ins:2},
+  b_alb:   {str:2, vosp:0, mit:2, ins:0},
+  b_d3:    {str:2, vosp:2, mit:2, ins:2},
+  b_ua:    {str:0, vosp:1, mit:0, ins:2},
+  b_cr:    {str:0, vosp:0, mit:2, ins:2},
+  b_urea:  {str:0, vosp:0, mit:2, ins:1},
+  // Липиды
+  l_tg:    {str:0, vosp:1, mit:0, ins:2},
+  l_ldl:   {str:0, vosp:2, mit:0, ins:2},
+  l_hdl:   {str:0, vosp:1, mit:0, ins:2},
+  l_chol:  {str:0, vosp:1, mit:0, ins:2},
+  l_vldl:  {str:0, vosp:1, mit:0, ins:2},
+  // Доп анализы
+  d_hba1c: {str:0, vosp:0, mit:0, ins:2},
+  d_fer:   {str:2, vosp:1, mit:2, ins:0},
+  d_hcy:   {str:2, vosp:2, mit:0, ins:0},
+  d_crp:   {str:0, vosp:2, mit:0, ins:1},
+  d_ins:   {str:0, vosp:0, mit:0, ins:2},
+  d_cpep:  {str:0, vosp:0, mit:0, ins:2},
+  d_fe:    {str:1, vosp:0, mit:2, ins:0},
+  // Гормоны
+  h_ttg:   {str:2, vosp:0, mit:2, ins:0},
+  h_t3:    {str:0, vosp:0, mit:2, ins:0},
+  h_t4:    {str:0, vosp:0, mit:2, ins:0},
+  h_attpo: {str:0, vosp:2, mit:0, ins:0},
+  h_attg:  {str:0, vosp:2, mit:0, ins:0},
+  h_ft:    {str:2, vosp:0, mit:2, ins:2},
+};
+
+function calcAgingScores() {
+  let scores = {str:0, vosp:0, mit:0, ins:0};
+  let details = {str:[], vosp:[], mit:[], ins:[]};
+
+  // 1. Symptom fields (value 0/1/2)
+  Object.entries(symptomWeights).forEach(([id, w]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = parseInt(el.value);
+    if (isNaN(val) || val === 0) return;
+    Object.keys(w).forEach(sc => {
+      const pts = w[sc] * val;
+      if (pts > 0) {
+        scores[sc] += pts;
+        details[sc].push(`${id} (+${pts})`);
+      }
+    });
+  });
+
+  // 2. YN fields that contribute to insulin (питание/образ жизни)
+  // Курение, алкоголь -> str+1
+  ['s13_5a','s13_5b'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value === 'да') {
+      scores.str += 1; details.str.push(`${id} (вредные привычки +1)`);
+      scores.vosp += 1; details.vosp.push(`${id} +1`);
+    }
+  });
+  // Ничего из спорта -> +2 всем
+  const noSport = document.getElementById('s13_6h');
+  if (noSport && noSport.value === 'да') {
+    scores.str += 2; scores.vosp += 1; scores.mit += 2; scores.ins += 2;
+    details.str.push('нет спорта +2'); details.mit.push('нет спорта +2'); details.ins.push('нет спорта +2');
+  }
+  // Питание: много вне дома 5р/нед и каждый день -> ins+1
+  ['s12h_3','s12h_4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value === 'да') { scores.ins += 1; details.ins.push(`${id} еда вне дома +1`); }
+  });
+  // Срывы на сладкое/мучное/пиво -> ins+1 each
+  ['s12i_1','s12i_2','s12i_7','s12i_8','s12i_9'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value === 'да') { scores.ins += 1; details.ins.push(`${id} +1`); }
+  });
+  // Выглядит старше -> str+1, mit+1
+  const looksOld = document.getElementById('s14_3');
+  if (looksOld && looksOld.value === 'да') {
+    scores.str += 1; scores.mit += 1;
+    details.str.push('выглядит старше +1'); details.mit.push('выглядит старше +1');
+  }
+
+  // 3. Analysis fields (score if outside norm)
+  const sex = document.querySelector('input[name="sex"]:checked') ? document.querySelector('input[name="sex"]:checked').value : 'm';
+  Object.entries(analysisWeights).forEach(([id, w]) => {
+    const el = document.getElementById(id);
+    if (!el || !el.value) return;
+    const val = parseFloat(el.value);
+    if (isNaN(val)) return;
+    const low = parseFloat(sex === 'm' ? el.dataset.normMLow : el.dataset.normFLow);
+    const high = parseFloat(sex === 'm' ? el.dataset.normMHigh : el.dataset.normFHigh);
+    if (isNaN(low) || isNaN(high)) return;
+    const abnormal = (val < low || val > high);
+    if (abnormal) {
+      Object.keys(w).forEach(sc => {
+        if (w[sc] > 0) {
+          scores[sc] += w[sc];
+          details[sc].push(`Анализ ${id} (${val}) (+${w[sc]})`);
+        }
+      });
+    }
+  });
+
+  // Update UI
+  const maxScore = Math.max(...Object.values(scores), 1);
+  ['str','vosp','mit','ins'].forEach(sc => {
+    const s = scores[sc];
+    document.getElementById('score-'+sc).textContent = s;
+    const pct = Math.min(100, Math.round(s / maxScore * 100));
+    document.getElementById('bar-'+sc).style.width = pct + '%';
+  });
+
+  // Breakdown
+  const bd = document.getElementById('aging-breakdown');
+  const scenarioNames = {str:'🔴 Хронический дистресс', vosp:'🟠 Хроническое воспаление', mit:'🟣 Дисфункция митохондрий', ins:'🔵 Инсулинорезистентность'};
+  let html = '';
+  ['str','vosp','mit','ins'].forEach(sc => {
+    const s = scores[sc];
+    const level = s === 0 ? 'Нет признаков' : s <= 5 ? 'Лёгкая степень' : s <= 15 ? 'Умеренная степень' : 'Высокая степень';
+    const levelColor = s === 0 ? '#27ae60' : s <= 5 ? '#f39c12' : s <= 15 ? '#e67e22' : '#c0392b';
+    html += `<div style="margin-bottom:14px;padding:10px 14px;background:#f8f9fa;border-radius:6px;border-left:4px solid ${levelColor};">
+      <strong>${scenarioNames[sc]}</strong> — <span style="color:${levelColor};font-weight:700;">${s} баллов (${level})</span><br>
+      <span style="font-size:12px;color:#666;">${details[sc].length > 0 ? details[sc].slice(0,8).join(' | ') + (details[sc].length > 8 ? ` ... +${details[sc].length-8} ещё` : '') : 'Нет отклонений'}</span>
+    </div>`;
+  });
+  bd.innerHTML = html;
+}
+
+function printForm() { window.print(); }
+
+// ========== BUILD YES/NO for q9 ==========
+function initYNFields() {
+  const q9 = document.getElementById('q9');
+  if (q9) {
+    const yn = makeYN('q9_val');
+    q9.appendChild(yn);
+  }
+}
+
+// ========== INIT ==========
+window.addEventListener('DOMContentLoaded', () => {
+  // Build all sections
+  buildSection('sec1_body', sec1Items);
+  buildSection('sec2_body', sec2Items);
+  buildSection('sec3_body', sec3Items);
+  buildSection('sec4_body', sec4Items);
+  buildSection('sec5_body', sec5Items);
+  buildSection('sec6f_body', sec6fItems);
+  buildSection('sec6m_body', sec6mItems);
+  buildSection('sec7_body', sec7Items);
+  buildSection('sec8_body', sec8Items);
+  buildSection('sec9_body', sec9Items);
+  buildSection('sec10_body', sec10Items);
+  buildSection('sec11_body', sec11Items);
+  buildSection('sec12_1_body', sec12_1Items);
+  buildSection('sec12_2_body', sec12_2Items);
+  buildSection('sec12_22_body', sec12_22Items);
+  buildSection('sec12_23_body', sec12_23Items);
+  buildSection('sec12_det_body', sec12_detItems);
+  buildSection('sec13_body', sec13Items);
+  buildSection('sec14_body', sec14Items);
+  buildSection('sec15_body', sec15Items);
+
+  // Build analysis tables
+  buildAnalysisTable('table_oac', analysisData.oac);
+  buildAnalysisTable('table_bac', analysisData.bac);
+  buildAnalysisTable('table_lip', analysisData.lip);
+  buildAnalysisTable('table_add', analysisData.add);
+  buildAnalysisTable('table_hor', analysisData.hor);
+
+  initYNFields();
+  loadData();
+  updateProgress();
+  document.body.addEventListener('input', function(){ saveData(); updateProgress(); });
+  document.body.addEventListener('click', function(e){
+    var t=e.target;
+    if(t&&(t.classList.contains('rating-btn')||t.classList.contains('yn-btn'))){
+      setTimeout(function(){ saveData(); updateProgress(); },30);
+    }
+  });
+});
+
+// ══════════════════════════════════════════════════════
+// TAB NAVIGATION — WebView-safe (no querySelectorAll in onclick)
+// ══════════════════════════════════════════════════════
+var _tabEls = null, _navEls = null;
+function _cacheTabs() {
+  if (!_tabEls) _tabEls = document.querySelectorAll('.tab-content');
+  if (!_navEls) _navEls = document.querySelectorAll('.nav-tab');
+}
+function showTab(tabId, navIdx) {
+  _cacheTabs();
+  for (var i = 0; i < _tabEls.length; i++) _tabEls[i].classList.remove('active');
+  for (var i = 0; i < _navEls.length; i++) _navEls[i].classList.remove('active');
+  var t = document.getElementById(tabId);
+  if (t) t.classList.add('active');
+  if (typeof navIdx === 'number' && _navEls[navIdx]) _navEls[navIdx].classList.add('active');
+  try { window.scrollTo(0, 0); } catch(e) {}
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════════════
+// SESSION STORAGE (works in Telegram/WhatsApp WebView)
+// ══════════════════════════════════════════════════════
+var SS = 'anketa_ru_v1';
+function saveData() {
+  var d = {};
+  var els = document.querySelectorAll('input,textarea,select');
+  for (var i = 0; i < els.length; i++) if (els[i].id) d[els[i].id] = els[i].value;
+  try { sessionStorage.setItem(SS, JSON.stringify(d)); } catch(e) {}
+}
+function loadData() {
+  try {
+    var raw = sessionStorage.getItem(SS); if (!raw) return;
+    var d = JSON.parse(raw);
+    Object.keys(d).forEach(function(id) {
+      var v = d[id]; if (!v && v !== 0) return;
+      var el = document.getElementById(id); if (!el) return;
+      if (el.type === 'hidden') {
+        var n = parseInt(v);
+        if (!isNaN(n) && n >= 0 && n <= 2) selectRating(id, n);
+        else if (v === 'да' || v === 'нет') selectYN(id, v);
+      } else { el.value = v; if (el.classList.contains('val-input')) checkNorm(el); }
+    });
+    showToast('📂 Прогресс восстановлен');
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════
+// BUILD SUMMARY TEXT
+// ══════════════════════════════════════════════════════
+function buildText() {
+  function g(id) { var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+  var L = ['🩺 АНКЕТА ЗДОРОВЬЯ', '═══════════════════════'];
+  var fio=g('fio'),age=g('age'),ht=g('height'),wt=g('weight'),city=g('city');
+  if(fio) L.push('👤 ФИО: '+fio);
+  if(age) L.push('🎂 Возраст: '+age+' лет');
+  if(ht&&wt) L.push('📏 Рост: '+ht+' см, Вес: '+wt+' кг');
+  if(city) L.push('📍 Город: '+city);
+  var goal=g('goal_health'); if(goal) L.push('\n🎯 Цель по здоровью:\n'+goal.slice(0,400)+(goal.length>400?'…':''));
+  var ae=g('goal_aesthetics'); if(ae) L.push('\n🪞 Эстетика/вес:\n'+ae.slice(0,300)+(ae.length>300?'…':''));
+  var dx=g('diagnoses'); if(dx) L.push('\n📋 Диагнозы/операции:\n'+dx.slice(0,400)+(dx.length>400?'…':''));
+  // Симптомы оценка 2
+  var allSec=[sec1Items,sec2Items,sec3Items,sec4Items,sec5Items,
+              sec6fItems,sec6mItems,sec7Items,sec8Items,sec9Items,sec10Items,sec11Items];
+  var sv=[]; allSec.forEach(function(s){s.forEach(function(it){
+    var e=document.getElementById(it[1]); if(e&&parseInt(e.value)===2) sv.push(it[0]);
+  });});
+  if(sv.length){ L.push('\n⚠️ Выраженные симптомы (оценка 2, '+sv.length+' шт.):');
+    sv.slice(0,8).forEach(function(t){L.push('  • '+t.slice(0,90));}); if(sv.length>8) L.push('  … и ещё '+(sv.length-8)); }
+  // Симптомы оценка 1
+  var md=[]; allSec.forEach(function(s){s.forEach(function(it){
+    var e=document.getElementById(it[1]); if(e&&parseInt(e.value)===1) md.push(it[0]);
+  });});
+  if(md.length){ L.push('\n🔸 Умеренные симптомы (оценка 1, '+md.length+' шт.):');
+    md.slice(0,5).forEach(function(t){L.push('  • '+t.slice(0,90));}); if(md.length>5) L.push('  … и ещё '+(md.length-5)); }
+  var meds=g('s13_1'); if(meds) L.push('\n💊 Лекарства/витамины:\n'+meds.slice(0,300)+(meds.length>300?'…':''));
+  var life=g('s13_3'); if(life) L.push('\n🏃 Образ жизни:\n'+life.slice(0,200)+(life.length>200?'…':''));
+  // Анализы — отклонения
+  var ab=[]; var vinp=document.querySelectorAll('.val-input');
+  var sx=(document.querySelector('input[name="sex"]:checked')||{value:'m'}).value;
+  for(var i=0;i<vinp.length;i++){
+    var inp=vinp[i]; if(!inp.value) continue;
+    var v=parseFloat(inp.value),lo=parseFloat(sx==='m'?inp.dataset.normMLow:inp.dataset.normFLow),
+        hi=parseFloat(sx==='m'?inp.dataset.normMHigh:inp.dataset.normFHigh);
+    if(!isNaN(lo)&&!isNaN(hi)&&(v<lo||v>hi)){
+      var cd=inp.closest('tr')&&inp.closest('tr').querySelector('.abbrev');
+      ab.push((cd?cd.textContent:inp.id)+': '+inp.value+(v<lo?' ↓':' ↑'));
+    }
+  }
+  if(ab.length){ L.push('\n🔬 Отклонения в анализах ('+ab.length+'):');
+    ab.slice(0,12).forEach(function(a){L.push('  • '+a);}); if(ab.length>12) L.push('  … и ещё '+(ab.length-12)); }
+  L.push('\n═══════════════════════');
+  L.push('Анкета здоровья | Интегративная медицина');
+  return L.join('\n');
+}
+
+// ══════════════════════════════════════════════════════
+// MODAL & SEND LOGIC
+// ══════════════════════════════════════════════════════
+var _sendText = '';
+function openModal() {
+  _sendText = buildText();
+  document.getElementById('previewBox').textContent = _sendText;
+  updateLinks();
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+
+function updateLinks() {
+  var enc = encodeURIComponent(_sendText);
+  document.getElementById('tgBtn').href = 'https://t.me/share/url?text='+enc;
+  document.getElementById('waBtn').href = 'https://wa.me/?text='+enc;
+}
+
+function handleEmail() {
+  var em = (document.getElementById('doctorEmail').value||'').trim();
+  if(!em){ showToast('⚠️ Введите email врача'); return false; }
+  var subj = encodeURIComponent('Анкета здоровья — '+( (document.getElementById('fio')||{}).value||'пациент'));
+  var body = encodeURIComponent(_sendText);
+  window.location.href = 'mailto:'+em+'?subject='+subj+'&body='+body;
+  return false;
+}
+function sendEmail() { handleEmail(); }
+
+function copyText() {
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(_sendText).then(function(){ showToast('✅ Скопировано!'); });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=_sendText; ta.style.cssText='position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand('copy'); showToast('✅ Скопировано!'); }catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
+function showToast(msg) {
+  var t=document.getElementById('toastEl');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2600);
+}
+
+</script>
+
+<style>
+@media print {
+  .nav-tabs, .form-actions, .page-header { display: none !important; }
+  .tab-content { display: block !important; page-break-after: always; }
+  body { background: #fff; }
+}
+
+/* Score cards */
+.score-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.10);
+  overflow: hidden;
+}
+.score-card-title {
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+}
+.score-card-body {
+  padding: 16px 14px 14px;
+  text-align: center;
+}
+.score-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1;
+}
+.score-label {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+.score-bar-wrap {
+  background: #e8edf2;
+  border-radius: 20px;
+  height: 8px;
+  overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width .6s ease;
+}
+</style>
+
+</body>
+</html>
